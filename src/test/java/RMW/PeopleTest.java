@@ -1,4 +1,4 @@
-import static org.testng.Assert.*;
+package RMW;
 
 /**
  * @author Jakub Czajka
