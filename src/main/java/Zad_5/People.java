@@ -1,4 +1,4 @@
-package RMW;
+package Zad_5;
 
 import io.codearte.jfairy.producer.person.Person;
 import io.codearte.jfairy.producer.person.Person.Sex;
