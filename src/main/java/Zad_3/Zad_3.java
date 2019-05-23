@@ -2,6 +2,7 @@ package Zad_3;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,7 +15,6 @@ import java.util.stream.Stream;
  * @author Jakub Czajka
  */
 class Zad_3 {
-
 
   public static void main(String[] args) throws InterruptedException {
     ThreeDimetionPoint start = new ThreeDimetionPoint(0, 0, 0);
