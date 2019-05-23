@@ -1,0 +1,81 @@
+package countdownlatch.F_zadanieCountDownLatchTimeout;
+
+import pakietpomocniczy.MyThreadFactory;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * Witamy w zadaniu drugim z CountDownLatch.
+ * Ma ono na celu pokazdanie możliwości ustawienia czasu oczekiwania na CountDownLatch.
+ * Po zdobyciu podstaw przedstawionych w poprzednich
+ * przykładach powinno Ci ono pójść jak z płatka.
+ *
+ * @see CountDownLatch
+ *
+ * @author Marcin Ogorzalek
+ * @author Kacper Staszek
+ *
+ * TODO: Kucharzz (czyli Kuchar wraz z kompanami) obrabia jubilera. Policja już jedzie na miejsce zdarzenia
+ *  i kierowca ekipy nie może dłużej czekać
+ *  Napisz program który to sumuluje. Czas oczekiwania kierowcy nie może być dłuższy niż 5000 ms
+ *  podczas gdy chłopaki moga obrabiać jubilera nawet w 10_000 ms.
+ *  Kto zdąży ten ucieknie, kto nie - idzie do paki.
+ *  Skorzystaj śmiało z fabryki wątków, którą umieściłem w projekcie.
+ */
+
+public class Napad {
+  private int ilośćLudziWEkipie;
+  private long czasDoPrzyjazduPolicji;
+  private int maksymalnyCzasRoboty;
+
+  Napad(int ilośćLudziWEkipie, long czasDoPrzyjazduPolicji, int maksymalnyCzasRoboty) {
+    this.ilośćLudziWEkipie = ilośćLudziWEkipie;
+    this.czasDoPrzyjazduPolicji = czasDoPrzyjazduPolicji;
+    this.maksymalnyCzasRoboty = maksymalnyCzasRoboty;
+  }
+
+  public static void main(String[] args) {
+    Napad napad = new Napad(4, 5000, 10_000);
+    napad.uruchamianieWątków(napad.tworzeniePotrzebnychObiektów());
+  }
+
+  MetadaneNapadu tworzeniePotrzebnychObiektów() {
+    CountDownLatch zatrzaskCzekającyNaKolegów = new CountDownLatch(ilośćLudziWEkipie);
+    ExecutorService kierowcaExecutor = Executors.newSingleThreadExecutor();
+    ExecutorService ekipaExecutor = Executors.newFixedThreadPool(ilośćLudziWEkipie,
+        new MyThreadFactory("Członek ekipy"));
+    Więzienie więzienie = new Więzienie();
+    return new MetadaneNapadu(zatrzaskCzekającyNaKolegów, kierowcaExecutor,
+        ekipaExecutor, więzienie);
+  }
+
+  void uruchamianieWątków(MetadaneNapadu metadaneNapadu) {
+    metadaneNapadu.kierowcaExecutor.submit(new Kierowca(metadaneNapadu.zatrzaskKierowcy,
+        metadaneNapadu.ekipaExecutor, czasDoPrzyjazduPolicji));
+    metadaneNapadu.kierowcaExecutor.shutdown();
+
+    for (int i = 0; i < ilośćLudziWEkipie; i++) {
+      metadaneNapadu.ekipaExecutor.submit(new CzłonekEkipy(metadaneNapadu.zatrzaskKierowcy,
+          metadaneNapadu.więzienie, maksymalnyCzasRoboty));
+    }
+    metadaneNapadu.ekipaExecutor.shutdown();
+  }
+
+  class MetadaneNapadu {
+    CountDownLatch zatrzaskKierowcy;
+    ExecutorService kierowcaExecutor;
+    ExecutorService ekipaExecutor;
+    Więzienie więzienie;
+
+     MetadaneNapadu(CountDownLatch zatrzaskKierowcy, ExecutorService kierowcaExecutor,
+        ExecutorService ekipaExecutor, Więzienie więzienie) {
+      this.zatrzaskKierowcy = zatrzaskKierowcy;
+      this.kierowcaExecutor = kierowcaExecutor;
+      this.ekipaExecutor = ekipaExecutor;
+      this.więzienie = więzienie;
+    }
+  }
+}
+
+
