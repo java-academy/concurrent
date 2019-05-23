@@ -11,11 +11,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 class Pasażer implements Runnable{
     private final Pociąg pociąg;
-    private final CountDownLatch latch;
+    private final CountDownLatch zatrzaskCzekającyNaKompletPasażerów;
 
-    Pasażer(Pociąg pociąg, CountDownLatch latch) {
+    Pasażer(Pociąg pociąg, CountDownLatch zatrzaskCzekającyNaKompletPasażerów) {
         this.pociąg = pociąg;
-        this.latch = latch;
+        this.zatrzaskCzekającyNaKompletPasażerów = zatrzaskCzekającyNaKompletPasażerów;
     }
 
     @Override
@@ -24,16 +24,14 @@ class Pasażer implements Runnable{
         try {
             Thread.sleep(ThreadLocalRandom.current().nextInt(10000));
             pociąg.pasażerStawiłSięNaPociąg(this);
-            latch.countDown();
+            zatrzaskCzekającyNaKompletPasażerów.countDown();
         } catch (InterruptedException ignored) {
             System.err.println(ignored.getMessage());
         }
     }
-
-
     /**
      * @return nazwa wątku zależna od nazwy fabryki wątków.
-     * @see fabryczkapomocnicza.MyThreadFactory
+     * @see pakietpomocniczy.MyThreadFactory
      */
     @Override
     public String toString() {

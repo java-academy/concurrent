@@ -1,4 +1,4 @@
-package fabryczkapomocnicza;
+package pakietpomocniczy;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

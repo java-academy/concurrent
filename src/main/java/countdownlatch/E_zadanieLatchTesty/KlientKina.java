@@ -10,11 +10,11 @@ import java.util.concurrent.ThreadLocalRandom;
 class KlientKina implements Runnable{
 
   private final Kino kino;
-  private final CountDownLatch latch;
+  private final CountDownLatch zatrzaskCzekającyZRozpoczęciemSeansu;
 
-  KlientKina(Kino kino, CountDownLatch latch) {
+  KlientKina(Kino kino, CountDownLatch zatrzaskCzekającyZRozpoczęciemSeansu) {
     this.kino = kino;
-    this.latch = latch;
+    this.zatrzaskCzekającyZRozpoczęciemSeansu = zatrzaskCzekającyZRozpoczęciemSeansu;
   }
 
   @Override
@@ -22,9 +22,9 @@ class KlientKina implements Runnable{
     System.out.println("Ale sobie zarezerwuje bilecik!!");
     try {
       kino.rezerwujBilet(this, ThreadLocalRandom.current().nextInt(2000));
-      latch.countDown();
-    } catch (InterruptedException ignore) {
-
+      zatrzaskCzekającyZRozpoczęciemSeansu.countDown();
+    } catch (InterruptedException ignored) {
+      System.err.println(ignored.getMessage());
     }
   }
 }

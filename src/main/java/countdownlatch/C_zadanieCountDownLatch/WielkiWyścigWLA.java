@@ -1,12 +1,10 @@
 package countdownlatch.C_zadanieCountDownLatch;
 
-import fabryczkapomocnicza.MyThreadFactory;
-import java.util.concurrent.CopyOnWriteArrayList;
+import pakietpomocniczy.MyThreadFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <p>Czas na pierwsze większe zadanko dla Ciebie :) Będzie ono bardzo podobne do zadania z przykładu,
@@ -22,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *  Skorzystaj śmiało z fabryki wątków, którą umieściłem w projekcie.
  */
 
-public class WielkiWyścigWLA {
+class WielkiWyścigWLA {
 
     private int liczbaUczestników;
 
@@ -38,32 +36,32 @@ public class WielkiWyścigWLA {
 
     MetadaneWyścigu stwórzPotrzebneObiekty() {
 
-        CountDownLatch latch = new CountDownLatch(liczbaUczestników);
-        Wyścig wyścig = new Wyścig(latch);
+        CountDownLatch zatrzaskCzekającyNaKierowców = new CountDownLatch(liczbaUczestników);
+        Wyścig wyścig = new Wyścig(zatrzaskCzekającyNaKierowców);
         ThreadFactory threadFactory = new MyThreadFactory("Kierowca");
         ExecutorService executorService = Executors
             .newFixedThreadPool(liczbaUczestników, threadFactory);
 
-        return new MetadaneWyścigu(latch, wyścig, executorService);
+        return new MetadaneWyścigu(zatrzaskCzekającyNaKierowców, wyścig, executorService);
     }
 
     void uruchomWątki(MetadaneWyścigu doTestów) {
 
         new Thread(doTestów.wyścig, "Wyścig").start();
         for (int i = 0; i < liczbaUczestników; i++) {
-            doTestów.executorService.submit(new Kierowca(doTestów.latch, doTestów.wyścig));
+            doTestów.executorService.submit(new Kierowca(doTestów.zatrzaskCzekającyNaKierowców, doTestów.wyścig));
         }
         doTestów.executorService.shutdown();
     }
 
     class MetadaneWyścigu {
 
-        CountDownLatch latch;
+        CountDownLatch zatrzaskCzekającyNaKierowców;
         Wyścig wyścig;
         ExecutorService executorService;
 
-        MetadaneWyścigu(CountDownLatch countDownLatch, Wyścig wyścig, ExecutorService executorService) {
-            this.latch = countDownLatch;
+        MetadaneWyścigu(CountDownLatch zatrzaskCzekającyNaKierowców, Wyścig wyścig, ExecutorService executorService) {
+            this.zatrzaskCzekającyNaKierowców = zatrzaskCzekającyNaKierowców;
             this.wyścig = wyścig;
             this.executorService = executorService;
         }

@@ -18,49 +18,49 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Kacper Staszek
  * @author Marcin Ogorzałek
  *
- * TODO: Uruchom program, przeanalizuj kod i działanie.
- *  Poznaj odpowiedź na pytanie co zmienia parametr dodany do konstruktora CountDownLatch
+ * TODO: Uruchom program, przeanalizuj kod i działanie. Co zmienia parametr dodany do konstruktora CountDownLatch?
  */
-public class WprowadzenieCountDownLatch {
-
+class WprowadzenieCountDownLatch {
 
     private static final int WIELKOSC_LICZNIKA = 3;
 
     public static void main(String[] args) {
 
-        CountDownLatch countDownLatch = new CountDownLatch(WIELKOSC_LICZNIKA);
+        CountDownLatch zatrzask = new CountDownLatch(WIELKOSC_LICZNIKA);
         for (int i = 0; i < WIELKOSC_LICZNIKA; i++) {
-            Thread thread = new Thread(new Task(countDownLatch), "Wątek wykonujący zadanie numer  " + i);
+            Thread thread = new Thread(new Task(zatrzask), "Wątek wykonujący zadanie numer  " + i);
             thread.start();
         }
 
         System.out.println("Jestem wątek, który musi poczekać na inne operacje do zakończenia, zanim pójdę dalej");
         try {
-            countDownLatch.await(); // metoda, która zatrzymuje dalsze instrukcje, dopóki countDownLatch nie spadnie do 0;
-        } catch (InterruptedException e) {
-            System.err.println(e.getMessage());
+            //TODO: Ctrl+q na metodzie await() by sprawdzić jak działa
+            zatrzask.await();
+        } catch (InterruptedException ignore) {
+            System.err.println(ignore.getMessage());
         }
         System.out.println("Ok, wszyscy skończyli, to lecę dalej!");
     }
 }
 
 class Task implements Runnable {
-    private final CountDownLatch latch;
+    private final CountDownLatch zatrzask;
 
-    Task(CountDownLatch latch) {
-        this.latch = latch;
+    Task(CountDownLatch zatrzask) {
+        this.zatrzask = zatrzask;
     }
 
     @Override
     public void run() {
         System.out.println("Doing stuff");
         try {
-            Thread.sleep(ThreadLocalRandom.current().nextInt(10000));  //Symulujemy, że zadanie zajmuje troszkę czasu
+            Thread.sleep(ThreadLocalRandom.current().nextInt(10000));
         } catch (InterruptedException ignore) {
             System.err.println(ignore.getMessage());
         }
         System.out.println("Skończyłem moje zadanko! " + Thread.currentThread().getName());
-        latch.countDown(); //Dekrementuje nasz licznik o jeden. Kiedy licznik osiągnie zero, zadanie oczekujące się rozpocznie.
+        //TODO: Ctrl+q na metodzie countDown() by sprawdzić jak działa
+        zatrzask.countDown();
     }
 }
 

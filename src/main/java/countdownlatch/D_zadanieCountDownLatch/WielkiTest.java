@@ -1,17 +1,19 @@
 package countdownlatch.D_zadanieCountDownLatch;
 
+import static pakietpomocniczy.Color.*;
+
 import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Kacper Staszek
  * @author Marcin Ogorzałek
  */
-class Test implements Runnable {
+class WielkiTest implements Runnable {
 
   final CountDownLatch zatrzaskDoRozpoczęciaTestu;
   final CountDownLatch zatrzaskDoOgłoszeniaWynikówJakWszyscySkończąTest;
 
-  Test(CountDownLatch zatrzaskDoRozpoczęciaTestu,
+  WielkiTest(CountDownLatch zatrzaskDoRozpoczęciaTestu,
       CountDownLatch zatrzaskDoOgłoszeniaWynikówJakWszyscySkończąTest) {
     this.zatrzaskDoRozpoczęciaTestu = zatrzaskDoRozpoczęciaTestu;
     this.zatrzaskDoOgłoszeniaWynikówJakWszyscySkończąTest = zatrzaskDoOgłoszeniaWynikówJakWszyscySkończąTest;
@@ -20,18 +22,18 @@ class Test implements Runnable {
   @Override
   public void run() {
     try {
-      System.out.println("\033[1;32mWitamy na wielkim teście z historii! \033[0m");
+      System.out.println(GREEN+"Witamy na wielkim teście z historii!"+RESET);
       zatrzaskDoRozpoczęciaTestu.await();
-      System.out.println("\033[1;32mWszyscy gotowi, rozpoczynamy test! \033[0m");
+      System.out.println(GREEN+"Wszyscy gotowi, rozpoczynamy test!"+RESET);
     } catch (InterruptedException ignored) {
-
+      System.err.println(ignored.getMessage());
     }
     try {
       zatrzaskDoOgłoszeniaWynikówJakWszyscySkończąTest.await();
-      System.out.println(
-          "\033[1;32mWszyscy skończyli pisać test! Gratulujemy, ogłaszamy wyniki! \033[0m");
+      System.out.println(GREEN+"Wszyscy skończyli pisać test! "
+          + "Gratulujemy, ogłaszamy wyniki!"+RESET);
     } catch (InterruptedException ignored) {
-
+      System.err.println(ignored.getMessage());
     }
   }
 }

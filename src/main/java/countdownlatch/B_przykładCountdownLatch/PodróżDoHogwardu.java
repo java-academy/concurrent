@@ -1,6 +1,6 @@
 package countdownlatch.B_przykładCountdownLatch;
 
-import fabryczkapomocnicza.MyThreadFactory;
+import pakietpomocniczy.MyThreadFactory;
 
 import java.util.concurrent.*;
 
@@ -15,7 +15,8 @@ import java.util.concurrent.*;
  * @author Marcin Ogorzałek
  *
  * TODO:Uruchom program kilka razy, prześledź działanie.
- *  Zakomentuj oznaczoną linię w klasie Pociąg, uruchom program i zrozum działanie metody await();
+ * TODO:Zakomentuj oznaczoną linię w klasie Pociąg, uruchom program i zrozum działanie metody await();
+ * TODO: Zastanów się, czy egzekutor może mieć dowolny rozmiar?
  */
 public class PodróżDoHogwardu {
 
@@ -27,18 +28,14 @@ public class PodróżDoHogwardu {
 
         Pociąg pociąg = new Pociąg(ILOSC_ZAREZERWOWANYCH_BILETOW, pasażerowie);
 
-        CountDownLatch referencjaCounDownLatchZNaszegoPociągu = pociąg.getCountDownLatch();
+        CountDownLatch zatrzaskPociągu = pociąg.getCountDownLatch();
 
-        ThreadFactory threadFactory = new MyThreadFactory("Pasażer");
-
-        //TODO: Zastanów się, czy egzekutor może mieć dowolny rozmiar?
-
-        ExecutorService executorService = Executors.newFixedThreadPool(10, threadFactory);
+        ExecutorService serwisEgzekutorów = Executors.newFixedThreadPool(10, new MyThreadFactory("Pasażer"));
 
         for (int i = 0; i < ILOSC_ZAREZERWOWANYCH_BILETOW; i++) {
-            executorService.submit(new Pasażer(pociąg, referencjaCounDownLatchZNaszegoPociągu));
+            serwisEgzekutorów.submit(new Pasażer(pociąg, zatrzaskPociągu));
         }
-        executorService.shutdown();
+        serwisEgzekutorów.shutdown();
 
         pociąg.pociągOdjeżdża();
     }

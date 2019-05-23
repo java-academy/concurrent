@@ -12,38 +12,39 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 class Kino implements Runnable {
-  private final CountDownLatch latch;
+  private final CountDownLatch zatrzaskCzekającyZRozpoczęciemSeansu;
   List<KlientKina> klienciZRezerwacją = new ArrayList<>();
-  Lock lock = new ReentrantLock();
+  Lock zamek = new ReentrantLock();
 
-  Kino(CountDownLatch latch) {
-    this.latch = latch;
+  Kino(CountDownLatch zatrzaskCzekającyZRozpoczęciemSeansu) {
+    this.zatrzaskCzekającyZRozpoczęciemSeansu = zatrzaskCzekającyZRozpoczęciemSeansu;
   }
 
   @Override
   public void run() {
     try {
-      latch.await();
+      zatrzaskCzekającyZRozpoczęciemSeansu.await();
       System.out.println("Startujemy seans!");
-    } catch (InterruptedException ignore) {
-
+    } catch (InterruptedException ignored) {
+      System.err.println(ignored.getMessage());
     }
   }
 
   void rezerwujBilet(KlientKina klientKina, int ileCzasuKlientZajmujeBilet)
       throws InterruptedException {
     try {
-      lock.lock();
+      zamek.lock();
       System.out.println("Ktoś rezerwuje u nas bilecik.");
       Thread.sleep(ileCzasuKlientZajmujeBilet);
       klienciZRezerwacją.add(klientKina);
-      if(latch.getCount()>1) {
-        System.out.println("Bilecik zarezerwowany, zostało jeszcze " + (latch.getCount()-1));
+      if(zatrzaskCzekającyZRozpoczęciemSeansu.getCount()>1) {
+        System.out.println("Bilecik zarezerwowany, zostało jeszcze " + (
+            zatrzaskCzekającyZRozpoczęciemSeansu.getCount()-1));
       } else {
         System.out.println("Ostatni bilet zarezerwowany!");
       }
     } finally {
-      lock.unlock();
+      zamek.unlock();
     }
   }
 }

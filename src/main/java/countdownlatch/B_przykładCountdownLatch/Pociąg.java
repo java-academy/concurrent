@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * Odjedzie dopiero po dotarciu wszystkich pasażerów.
+ * Odjedzie dopiero z kompletem pasażerów.
  *
  * @see Pasażer
  *
@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
 class Pociąg {
     private final int zarezerwowaneBilety;
     private Queue<Pasażer> pasażerowieWPociągu;
-    private final CountDownLatch latch;
+    private final CountDownLatch zatrzaskCzekającyNaKompletPasażerów;
 
     /**
      * @param zarezerwowaneBilety na ich podstawie tworzymy obiekt CountDownLatch.
@@ -25,7 +25,7 @@ class Pociąg {
         System.out.println("Pociąg przyjechał na stację!!");
         this.zarezerwowaneBilety = zarezerwowaneBilety;
         this.pasażerowieWPociągu = pasażerowieWPociągu;
-        this.latch = new CountDownLatch(zarezerwowaneBilety);
+        this.zatrzaskCzekającyNaKompletPasażerów = new CountDownLatch(zarezerwowaneBilety);
     }
 
     void pasażerStawiłSięNaPociąg(Pasażer pasażer) {
@@ -35,11 +35,11 @@ class Pociąg {
 
     void pociągOdjeżdża() throws InterruptedException {
         // FIXME: oznaczona linia! tę linijkę zakomentuj i zobacz jak program zadziała. Teraz powinieneś zrozumieć, co tak naprawdę robi await();
-        latch.await();
+        zatrzaskCzekającyNaKompletPasażerów.await();
         System.out.println("Jedziemy do Hogwartu!");
     }
 
     CountDownLatch getCountDownLatch() {
-        return latch;
+        return zatrzaskCzekającyNaKompletPasażerów;
     }
 }

@@ -4,12 +4,18 @@ package countdownlatch.C_zadanieCountDownLatch;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @see countdownlatch.B_przykładCountdownLatch.Pasażer
+ *
+ * @author Kacper Staszek
+ * @author Marcin Ogorzałek
+ */
 class Kierowca implements Runnable {
-  private final CountDownLatch latch;
+  private final CountDownLatch zatrzaskCzekającyNaKierowców;
   private final Wyścig wyścig;
 
-  Kierowca(CountDownLatch latch, Wyścig wyścig) {
-    this.latch = latch;
+  Kierowca(CountDownLatch zatrzaskCzekającyNaKierowców, Wyścig wyścig) {
+    this.zatrzaskCzekającyNaKierowców = zatrzaskCzekającyNaKierowców;
     this.wyścig = wyścig;
   }
 
@@ -33,9 +39,7 @@ class Kierowca implements Runnable {
   void dojechałemNaLinięStartu() {
     System.out.println("Dojechałem na start i jestem gotowy "
         + Thread.currentThread().getName());
-    latch.countDown();
+    zatrzaskCzekającyNaKierowców.countDown();
     wyścig.dodajKierowcę(this);
-
   }
-
 }

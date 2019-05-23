@@ -10,13 +10,13 @@ import java.util.concurrent.TimeUnit;
  */
 class Kierowca implements Runnable {
 
-  private final CountDownLatch latch;
+  private final CountDownLatch zatrzaskCzekającyNaKolegów;
   private final ExecutorService ekipaExecutor;
   private final TimeUnit timeUnit = TimeUnit.MILLISECONDS;
   private final long czasDoPrzyjazduPolicji;
 
-  Kierowca(CountDownLatch latch, ExecutorService ekipaExecutor, long czasDoPrzyjazduPolicji) {
-    this.latch = latch;
+  Kierowca(CountDownLatch zatrzaskCzekającyNaKolegów, ExecutorService ekipaExecutor, long czasDoPrzyjazduPolicji) {
+    this.zatrzaskCzekającyNaKolegów = zatrzaskCzekającyNaKolegów;
     this.ekipaExecutor = ekipaExecutor;
     this.czasDoPrzyjazduPolicji = czasDoPrzyjazduPolicji;
   }
@@ -29,7 +29,7 @@ class Kierowca implements Runnable {
 
   void ucieczka() {
     try {
-      latch.await(czasDoPrzyjazduPolicji, timeUnit);
+      zatrzaskCzekającyNaKolegów.await(czasDoPrzyjazduPolicji, timeUnit);
       ekipaExecutor.shutdownNow();
       System.out.println("No najwyższy czas");
     } catch (InterruptedException e) {

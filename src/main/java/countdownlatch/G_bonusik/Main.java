@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * 1 - wsiąść do pociągu
  * 2 - usiąść sobie gdzieś wygodnie
  * <p>
- * Już po pierwszym zadaniu możemy wywołać metodę latch.countDown();
+ * Już po pierwszym zadaniu możemy wywołać metodę zatrzask.countDown();
  * <p>
  *
  * @author Kacper Staszek
@@ -36,24 +36,24 @@ public class Main {
 
 
     public static void main(String[] args) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(3);
+        CountDownLatch zatrzask = new CountDownLatch(3);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        ExecutorService serwisEgzekutorów = Executors.newFixedThreadPool(3);
         for (int i = 0; i < 3; i++) {
-            executorService.submit(new Task(latch));
+            serwisEgzekutorów.submit(new Task(zatrzask));
         }
 
-        latch.await();
+        zatrzask.await();
 
         System.out.println("Zadanka skończone, ja jadę dalej");
     }
 }
 
 class Task implements Runnable {
-    private final CountDownLatch latch;
+    private final CountDownLatch zatrzask;
 
-    Task(CountDownLatch latch) {
-        this.latch = latch;
+    Task(CountDownLatch zatrzask) {
+        this.zatrzask = zatrzask;
     }
 
     @Override
@@ -61,7 +61,7 @@ class Task implements Runnable {
         System.out.println("Robię swoje");
         try {
             Thread.sleep(ThreadLocalRandom.current().nextInt(5000));
-            latch.countDown();
+            zatrzask.countDown();
             System.out.println("Mogę sobie dalej robić swoje a wątek główny już ruszy, ponieważ wykonałem dla niego to, " +
                     "czego potrzebował");
             Thread.sleep(3000);

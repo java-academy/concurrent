@@ -30,7 +30,7 @@ public class RezerwacjaBiletówDoKinaIntegrationWithTestNG {
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     Thread.sleep(executionTime*1000);
     // Then
-    assertEquals(metadaneRezerwacji.latch.getCount(),0L);
+    assertEquals(metadaneRezerwacji.zatrzaskCzekającyZRozpoczęciemSeansu.getCount(),0L);
   }
 
   @Test (invocationCount = 10, threadPoolSize = 10, dataProvider = "numberOfTicketsAndExecutionTime")
@@ -53,7 +53,7 @@ public class RezerwacjaBiletówDoKinaIntegrationWithTestNG {
     // Given
     RezerwacjaBiletówDoKina rezerwacja = new RezerwacjaBiletówDoKina(numberOfTickets);
     MetadaneRezerwacji metadaneRezerwacji = rezerwacja.stworzeniePotrzebnychObiektów();
-    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.lock;
+    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.zamek;
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     Thread.sleep(executionTime);
@@ -67,7 +67,7 @@ public class RezerwacjaBiletówDoKinaIntegrationWithTestNG {
     // Given
     RezerwacjaBiletówDoKina rezerwacja = new RezerwacjaBiletówDoKina(numberOfTickets);
     MetadaneRezerwacji metadaneRezerwacji = rezerwacja.stworzeniePotrzebnychObiektów();
-    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.lock;
+    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.zamek;
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     Thread.sleep(executionTime*1000);

@@ -3,12 +3,16 @@ package countdownlatch.C_zadanieCountDownLatch;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Kacper Staszek
+ * @author Marcin Ogorzałek
+ */
 class Wyścig implements Runnable {
-  private final CountDownLatch latch;
+  private final CountDownLatch zatrzaskCzekającyNaKierowców;
   private final CopyOnWriteArrayList<Kierowca> kierowcyGotowiDoStartu = new CopyOnWriteArrayList<>();
 
-  Wyścig(CountDownLatch countDownLatch) {
-    this.latch = countDownLatch;
+  Wyścig(CountDownLatch zatrzaskCzekającyNaKierowców) {
+    this.zatrzaskCzekającyNaKierowców = zatrzaskCzekającyNaKierowców;
   }
 
   @Override
@@ -18,10 +22,10 @@ class Wyścig implements Runnable {
 
   void organizujWyścig() {
     try {
-      latch.await();
+      zatrzaskCzekającyNaKierowców.await();
       rozpocznijWyścig();
-    } catch (InterruptedException ignore) {
-
+    } catch (InterruptedException ignored) {
+      System.err.println(ignored.getMessage());
     }
   }
 

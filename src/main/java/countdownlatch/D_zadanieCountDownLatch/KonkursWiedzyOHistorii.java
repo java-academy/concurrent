@@ -1,6 +1,6 @@
 package countdownlatch.D_zadanieCountDownLatch;
 
-import fabryczkapomocnicza.MyThreadFactory;
+import pakietpomocniczy.MyThreadFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,7 +41,7 @@ class KonkursWiedzyOHistorii {
   }
 
   void startujWątki(MetadaneKonkursu metadaneKonkursu) {
-    new Thread(new Test(metadaneKonkursu.zatrzaskDoRozpoczęciaTestu,
+    new Thread(new WielkiTest(metadaneKonkursu.zatrzaskDoRozpoczęciaTestu,
         metadaneKonkursu.zatrzaskDoOgłoszeniaWyników),
         "Wielki test z historii").start();
     for (int i = 0; i < liczbaUczestnków; i++) {

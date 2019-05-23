@@ -30,7 +30,7 @@ public class RezerwacjaBiletówDoKinaIntegrationTestAwaitility {
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     // Then
-    await().atMost(executionTime, TimeUnit.SECONDS).until(metadaneRezerwacji.latch::getCount,equalTo(0L));
+    await().atMost(executionTime, TimeUnit.SECONDS).until(metadaneRezerwacji.zatrzaskCzekającyZRozpoczęciemSeansu::getCount,equalTo(0L));
   }
 
   @Test (invocationCount = 10, threadPoolSize = 10, dataProvider = "numberOfTicketsAndExecutionTime")
@@ -50,7 +50,7 @@ public class RezerwacjaBiletówDoKinaIntegrationTestAwaitility {
     // Given
     RezerwacjaBiletówDoKina rezerwacja = new RezerwacjaBiletówDoKina(numberOfTickets);
     MetadaneRezerwacji metadaneRezerwacji = rezerwacja.stworzeniePotrzebnychObiektów();
-    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.lock;
+    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.zamek;
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     //Then
@@ -62,7 +62,7 @@ public class RezerwacjaBiletówDoKinaIntegrationTestAwaitility {
     // Given
     RezerwacjaBiletówDoKina rezerwacja = new RezerwacjaBiletówDoKina(numberOfTickets);
     MetadaneRezerwacji metadaneRezerwacji = rezerwacja.stworzeniePotrzebnychObiektów();
-    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.lock;
+    ReentrantLock myLock = (ReentrantLock) metadaneRezerwacji.kino.zamek;
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     //Then

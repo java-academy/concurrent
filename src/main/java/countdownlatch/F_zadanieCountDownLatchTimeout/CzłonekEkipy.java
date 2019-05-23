@@ -9,12 +9,12 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 class CzłonekEkipy implements Runnable {
 
-  private final CountDownLatch latch;
+  private final CountDownLatch zatrzaskCzekającyNaKolegów;
   private final Więzienie więzienie;
   private final int maksymalnyCzasRoboty;
 
-  CzłonekEkipy(CountDownLatch latch, Więzienie więzienie, int maksymalnyCzasRoboty) {
-    this.latch = latch;
+  CzłonekEkipy(CountDownLatch zatrzaskCzekającyNaKolegów, Więzienie więzienie, int maksymalnyCzasRoboty) {
+    this.zatrzaskCzekającyNaKolegów = zatrzaskCzekającyNaKolegów;
     this.więzienie = więzienie;
     this.maksymalnyCzasRoboty = maksymalnyCzasRoboty;
   }
@@ -37,6 +37,6 @@ class CzłonekEkipy implements Runnable {
 
   void czasUciekać() {
     System.out.println(Thread.currentThread().getName() + " Mam wszystko, czas się zwijać.");
-    latch.countDown();
+    zatrzaskCzekającyNaKolegów.countDown();
   }
 }

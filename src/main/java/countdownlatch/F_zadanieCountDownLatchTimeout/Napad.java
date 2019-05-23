@@ -1,6 +1,6 @@
 package countdownlatch.F_zadanieCountDownLatchTimeout;
 
-import fabryczkapomocnicza.MyThreadFactory;
+import pakietpomocniczy.MyThreadFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,12 +42,12 @@ public class Napad {
   }
 
   MetadaneNapadu tworzeniePotrzebnychObiektów() {
-    CountDownLatch latch = new CountDownLatch(ilośćLudziWEkipie);
+    CountDownLatch zatrzaskCzekającyNaKolegów = new CountDownLatch(ilośćLudziWEkipie);
     ExecutorService kierowcaExecutor = Executors.newSingleThreadExecutor();
     ExecutorService ekipaExecutor = Executors.newFixedThreadPool(ilośćLudziWEkipie,
         new MyThreadFactory("Członek ekipy"));
     Więzienie więzienie = new Więzienie();
-    return new MetadaneNapadu(latch, kierowcaExecutor, ekipaExecutor, więzienie);
+    return new MetadaneNapadu(zatrzaskCzekającyNaKolegów, kierowcaExecutor, ekipaExecutor, więzienie);
   }
 
   void uruchamianieWątków(MetadaneNapadu metadaneNapadu) {
