@@ -12,11 +12,11 @@ import org.testng.annotations.Test;
  * @author Kacper Staszek
  * @author Marcin Ogorzałek
  */
-@Test(successPercentage = 90)
+@Test
 public class NapadIntegrationTest {
 
-  @Test(invocationCount = 1000, threadPoolSize = 100,
-      dataProvider = "failedRobberyConditions")
+  @Test(invocationCount = 100, threadPoolSize = 100,
+      dataProvider = "failedRobberyConditions", successPercentage = 90)
   public void whenThievesAreCatchThenGoToJail(int teamSize,
       long timeToPoliceArrive, int robberyTime) {
     // Given
@@ -30,11 +30,11 @@ public class NapadIntegrationTest {
       System.err.println(ignored.getMessage());
     }
     // Then
-    assertEquals(given.więzienie.getWięźniowie().size(), given.latch.getCount());
+    assertEquals(given.więzienie.getWięźniowie().size(), given.zatrzaskKierowcy.getCount());
   }
 
-  @Test(invocationCount = 1000, threadPoolSize = 100,
-      dataProvider = "succeedRobberyConditions")
+  @Test(invocationCount = 100, threadPoolSize = 100,
+      dataProvider = "succeedRobberyConditions", successPercentage = 90)
   public void whenPoliceIsLateToRobberyJailIsEmpty(int teamSize,
       long timeToPoliceArrive, int robberyTime) {
     // Given
@@ -51,8 +51,9 @@ public class NapadIntegrationTest {
     assertEquals(given.więzienie.getWięźniowie().size(), 0);
   }
 
-  @Test(invocationCount = 1000, threadPoolSize = 100,
-      dataProvider = "illegalTeamSize", expectedExceptions = IllegalArgumentException.class)
+  @Test(invocationCount = 100, threadPoolSize = 100,
+      dataProvider = "illegalTeamSize", expectedExceptions = IllegalArgumentException.class,
+      successPercentage = 90)
   public void whenTeamSizeZeroOrLessThenThrowsIllegalArgumentException(int teamSize,
       long timeToPoliceArrive, int robberyTime) {
     // Given

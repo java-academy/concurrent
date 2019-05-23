@@ -34,7 +34,8 @@ public class RezerwacjaBiletówDoKinaIntegrationWithTestNG {
   }
 
   @Test (invocationCount = 10, threadPoolSize = 10, dataProvider = "numberOfTicketsAndExecutionTime")
-  public void properNumberOfClientsOnReservationList(int numberOfTickets, int executionTime) throws Exception {
+  public void properNumberOfClientsOnReservationList(int numberOfTickets,
+      int executionTime) throws Exception {
     // Given
     RezerwacjaBiletówDoKina rezerwacja = new RezerwacjaBiletówDoKina(numberOfTickets);
     MetadaneRezerwacji metadaneRezerwacji = rezerwacja.stworzeniePotrzebnychObiektów();

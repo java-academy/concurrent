@@ -11,7 +11,7 @@ class Więzienie {
 
   void złapZłodzieja(CzłonekEkipy członekEkipy) {
     więźniowie.add(członekEkipy);
-    System.out.println("Bandzior złapany");
+    System.out.println("Bandzior złapany ");
   }
 
   CopyOnWriteArrayList<CzłonekEkipy> getWięźniowie() {

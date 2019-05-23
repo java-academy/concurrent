@@ -28,7 +28,7 @@ public class WielkiWyścigWLAIntegrationTest {
         // When
         wielkiWyścigWLA.uruchomWątki(given);
         // Then
-        await().until(() -> given.latch.getCount() > 0, equalTo(true));
+        await().until(() -> given.zatrzaskCzekającyNaKierowców.getCount() > 0, equalTo(true));
         assertTrue(given.wyścig.getKierowcyGotowiDoStartu() < numberOfDrivers);
     }
 
@@ -64,7 +64,7 @@ public class WielkiWyścigWLAIntegrationTest {
         // When
         wielkiWyścigWLA.uruchomWątki(given);
         // Then
-        assertEquals(given.latch.getCount(), numberOfDrivers);
+        assertEquals(given.zatrzaskCzekającyNaKierowców.getCount(), numberOfDrivers);
     }
 
     @Test(invocationCount = 100, threadPoolSize = 10, dataProvider = "numberOfDrivers")
@@ -75,7 +75,7 @@ public class WielkiWyścigWLAIntegrationTest {
         // When
         wielkiWyścigWLA.uruchomWątki(given);
         // Then
-        await().until(given.latch::getCount,equalTo((long) numberOfDrivers));
+        await().until(given.zatrzaskCzekającyNaKierowców::getCount,equalTo((long) numberOfDrivers));
     }
 
     @Test(invocationCount = 100, threadPoolSize = 10,

@@ -29,7 +29,6 @@ public class Napad {
   private long czasDoPrzyjazduPolicji;
   private int maksymalnyCzasRoboty;
 
-
   Napad(int ilośćLudziWEkipie, long czasDoPrzyjazduPolicji, int maksymalnyCzasRoboty) {
     this.ilośćLudziWEkipie = ilośćLudziWEkipie;
     this.czasDoPrzyjazduPolicji = czasDoPrzyjazduPolicji;
@@ -47,30 +46,31 @@ public class Napad {
     ExecutorService ekipaExecutor = Executors.newFixedThreadPool(ilośćLudziWEkipie,
         new MyThreadFactory("Członek ekipy"));
     Więzienie więzienie = new Więzienie();
-    return new MetadaneNapadu(zatrzaskCzekającyNaKolegów, kierowcaExecutor, ekipaExecutor, więzienie);
+    return new MetadaneNapadu(zatrzaskCzekającyNaKolegów, kierowcaExecutor,
+        ekipaExecutor, więzienie);
   }
 
   void uruchamianieWątków(MetadaneNapadu metadaneNapadu) {
-    metadaneNapadu.kierowcaExecutor.submit(new Kierowca(metadaneNapadu.latch,
+    metadaneNapadu.kierowcaExecutor.submit(new Kierowca(metadaneNapadu.zatrzaskKierowcy,
         metadaneNapadu.ekipaExecutor, czasDoPrzyjazduPolicji));
     metadaneNapadu.kierowcaExecutor.shutdown();
 
     for (int i = 0; i < ilośćLudziWEkipie; i++) {
-      metadaneNapadu.ekipaExecutor.submit(new CzłonekEkipy(metadaneNapadu.latch,
+      metadaneNapadu.ekipaExecutor.submit(new CzłonekEkipy(metadaneNapadu.zatrzaskKierowcy,
           metadaneNapadu.więzienie, maksymalnyCzasRoboty));
     }
     metadaneNapadu.ekipaExecutor.shutdown();
   }
 
   class MetadaneNapadu {
-    CountDownLatch latch;
+    CountDownLatch zatrzaskKierowcy;
     ExecutorService kierowcaExecutor;
     ExecutorService ekipaExecutor;
     Więzienie więzienie;
 
-     MetadaneNapadu(CountDownLatch latch, ExecutorService kierowcaExecutor,
+     MetadaneNapadu(CountDownLatch zatrzaskKierowcy, ExecutorService kierowcaExecutor,
         ExecutorService ekipaExecutor, Więzienie więzienie) {
-      this.latch = latch;
+      this.zatrzaskKierowcy = zatrzaskKierowcy;
       this.kierowcaExecutor = kierowcaExecutor;
       this.ekipaExecutor = ekipaExecutor;
       this.więzienie = więzienie;

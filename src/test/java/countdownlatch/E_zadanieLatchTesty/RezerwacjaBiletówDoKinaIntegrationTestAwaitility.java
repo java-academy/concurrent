@@ -30,11 +30,15 @@ public class RezerwacjaBiletówDoKinaIntegrationTestAwaitility {
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     // Then
-    await().atMost(executionTime, TimeUnit.SECONDS).until(metadaneRezerwacji.zatrzaskCzekającyZRozpoczęciemSeansu::getCount,equalTo(0L));
+    await()
+        .atMost(executionTime, TimeUnit.SECONDS)
+        .until(metadaneRezerwacji.zatrzaskCzekającyZRozpoczęciemSeansu::getCount,
+            equalTo(0L));
   }
 
   @Test (invocationCount = 10, threadPoolSize = 10, dataProvider = "numberOfTicketsAndExecutionTime")
-  public void properNumberOfClientsOnReservationList(int numberOfTickets, int executionTime) throws Exception {
+  public void properNumberOfClientsOnReservationList(int numberOfTickets,
+      int executionTime) throws Exception {
     // Given
     RezerwacjaBiletówDoKina rezerwacja = new RezerwacjaBiletówDoKina(numberOfTickets);
     MetadaneRezerwacji metadaneRezerwacji = rezerwacja.stworzeniePotrzebnychObiektów();
@@ -42,7 +46,9 @@ public class RezerwacjaBiletówDoKinaIntegrationTestAwaitility {
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     // Then
     await().atMost(executionTime, TimeUnit.SECONDS).until(fieldIn(metadaneRezerwacji.kino)
-        .ofType(List.class).andWithName("klienciZRezerwacją").call()::size,equalTo(numberOfTickets));
+        .ofType(List.class)
+        .andWithName("klienciZRezerwacją")
+        .call()::size, equalTo(numberOfTickets));
   }
 
   @Test(invocationCount = 10, threadPoolSize = 10, dataProvider = "numberOfTicketsAndExecutionTime")
@@ -54,7 +60,9 @@ public class RezerwacjaBiletówDoKinaIntegrationTestAwaitility {
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     //Then
-    await().atMost(executionTime,TimeUnit.SECONDS).until(myLock::isLocked,equalTo(true));
+    await()
+        .atMost(executionTime,TimeUnit.SECONDS)
+        .until(myLock::isLocked, equalTo(true));
   }
 
   @Test(invocationCount = 10, threadPoolSize = 10, dataProvider = "numberOfTicketsAndExecutionTime")
@@ -66,7 +74,9 @@ public class RezerwacjaBiletówDoKinaIntegrationTestAwaitility {
     // When
     rezerwacja.uruchomienieRezerwacji(metadaneRezerwacji);
     //Then
-    await().atMost(executionTime,TimeUnit.SECONDS).until(myLock::hasQueuedThreads,equalTo(false));
+    await()
+        .atMost(executionTime,TimeUnit.SECONDS)
+        .until(myLock::hasQueuedThreads, equalTo(false));
   }
 
   @DataProvider

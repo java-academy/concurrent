@@ -9,12 +9,12 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 class CzłonekEkipy implements Runnable {
 
-  private final CountDownLatch zatrzaskCzekającyNaKolegów;
+  private final CountDownLatch zatrzaskKierowcy;
   private final Więzienie więzienie;
   private final int maksymalnyCzasRoboty;
 
-  CzłonekEkipy(CountDownLatch zatrzaskCzekającyNaKolegów, Więzienie więzienie, int maksymalnyCzasRoboty) {
-    this.zatrzaskCzekającyNaKolegów = zatrzaskCzekającyNaKolegów;
+  CzłonekEkipy(CountDownLatch zatrzaskKierowcy, Więzienie więzienie, int maksymalnyCzasRoboty) {
+    this.zatrzaskKierowcy = zatrzaskKierowcy;
     this.więzienie = więzienie;
     this.maksymalnyCzasRoboty = maksymalnyCzasRoboty;
   }
@@ -25,18 +25,18 @@ class CzłonekEkipy implements Runnable {
   }
 
   void kradzież() {
-    System.out.println(Thread.currentThread().getName() + " Chwila, zagarniam jeszcze łupy!!");
+    System.out.printf("%s Chwila, zagarniam jeszcze łupy!!%n", Thread.currentThread().getName());
     try {
       Thread.sleep(ThreadLocalRandom.current().nextInt(maksymalnyCzasRoboty));
       czasUciekać();
     } catch (InterruptedException e) {
-      System.err.println(Thread.currentThread().getName() + " Dostałem kulkę! Już po mnie");
+      System.err.printf("%s Dostałem kulkę! Już po mnie%n", Thread.currentThread().getName());
       więzienie.złapZłodzieja(this);
     }
   }
 
   void czasUciekać() {
     System.out.println(Thread.currentThread().getName() + " Mam wszystko, czas się zwijać.");
-    zatrzaskCzekającyNaKolegów.countDown();
+    zatrzaskKierowcy.countDown();
   }
 }
