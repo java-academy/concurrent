@@ -1,5 +1,0 @@
-# Współbieżność w Jawie
-
-Repozytorium ukazuje rzeczy wbudowane w język od samego początku jak i te dostępne w pakiecie `java.util.concurrent`.
-
-Forma warsztatowa, by bardziej zaangażować.
